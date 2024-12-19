@@ -14,12 +14,10 @@ export const registerSocketEvents = (socket) => {
   });
 
   socket.on("pre-offer", (data) => {
-    console.log("preoffer came");
     webRTCHandler.handlePreOffer(data);
   });
 };
 
 export const sendPreOffer = (data) => {
-  console.log("emmiting to sereer pre offer event");
   socketIo.emit("pre-offer", data);
 };
