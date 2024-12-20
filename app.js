@@ -20,7 +20,6 @@ io.on("connection", (socket) => {
   console.log(connectedPeers);
 
   socket.on("pre-offer", (data) => {
-    console.log("preoffer came server");
     const { callePersonalCode, callType } = data;
 
     const connectedPeer = connectedPeers.find(

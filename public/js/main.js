@@ -2,12 +2,15 @@ import * as store from "./store.js";
 import * as wss from "./wss.js";
 import * as webRTCHandler from "./webRTCHandler.js";
 import * as constants from "./constants.js";
+import { getIncomingCallDialog } from "./elements.js";
 
 // initialize socket.io connection
+
 const socket = io("/");
 wss.registerSocketEvents(socket);
 
 // register event listenner for personal code copy button
+
 const personalCodeCopyButton = document.getElementById(
   "personal_code_copy_button"
 );
@@ -18,6 +21,7 @@ personalCodeCopyButton.addEventListener("click", () => {
 });
 
 // register event listener for connection buttons
+
 const personalCodeChatButton = document.getElementById(
   "personal_code_chat_button"
 );
@@ -42,3 +46,9 @@ personalCodeVideoButton.addEventListener("click", () => {
 
   webRTCHandler.sendPreOffer(callType, callePersonalCode);
 });
+
+getIncomingCallDialog(
+  "VIDEO",
+  () => {},
+  () => {}
+);
