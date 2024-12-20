@@ -33,6 +33,9 @@ io.on("connection", (socket) => {
       };
 
       io.to(callePersonalCode).emit("pre-offer", data);
+    } else {
+      const data = { preOfferAnswer: "CALLEE_NOT_FOUND" };
+      io.to(socket.id).emit("pre-offer-answer", data);
     }
   });
 

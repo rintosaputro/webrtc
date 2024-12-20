@@ -71,14 +71,17 @@ export const handlePreOfferAnswer = (data) => {
   ui.removeAllDialogs();
 
   if (preOfferAnswer === constants.preOfferAnswer.CALLEE_NOT_FOUND) {
+    ui.showInfoDialog(preOfferAnswer);
     // show dialog that callee not found
   }
 
   if (preOfferAnswer === constants.preOfferAnswer.CALL_UNAVAILABLE) {
+    ui.showInfoDialog(preOfferAnswer);
     // show dialog that call is not abble to connect
   }
 
   if (preOfferAnswer === constants.preOfferAnswer.CALL_REJECTED) {
+    ui.showInfoDialog(preOfferAnswer);
     // show dialog that call is rejected by callee
   }
 
