@@ -25,6 +25,7 @@ export const handlePreOffer = (data) => {
     callType === constants.callType.CHAT_PERSONAL_CODE ||
     callType === constants.callType.VIDEO_PERSONAL_CODE
   ) {
+    console.log("showing incoming call dialog");
     ui.showIncomingCallDialog(callType, acceptCallHandler, rejectCallHandler);
   }
 };

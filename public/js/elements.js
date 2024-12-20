@@ -43,6 +43,5 @@ export const getIncomingCallDialog = (
   dialogContent.appendChild(imageContainer);
   dialogContent.appendChild(buttonsContainer);
 
-  const dialogHtml = document.getElementById("dialog");
-  dialogHtml.appendChild(dialog);
+  return dialog;
 };
