@@ -1,8 +1,30 @@
 import * as wss from "./wss.js";
 import * as constants from "./constants.js";
 import * as ui from "./ui.js";
+import * as store from "./store.js";
 
 let connectedUserDetails;
+
+const defaultConstraints = {
+  audio: true,
+  video: true,
+};
+
+// untuk mendapat vidoe dan audio dari local
+export const getLocalPreview = () => {
+  navigator.mediaDevices
+    .getUserMedia(defaultConstraints)
+    .then((stream) => {
+      ui.updateLocalVideo(stream);
+      store.setLocalStream(stream);
+    })
+    .catch((err) => {
+      console.error(
+        "error occured when trying to get an access to get local video and audio",
+        err
+      );
+    });
+};
 
 export const sendPreOffer = (callType, callePersonalCode) => {
   connectedUserDetails = {
