@@ -76,7 +76,7 @@ const createPeerConnection = () => {
 export const sendPreOffer = (callType, callePersonalCode) => {
   connectedUserDetails = {
     callType,
-    callePersonalCode,
+    socketId: callePersonalCode,
   };
 
   if (
@@ -136,7 +136,7 @@ const sendPreOfferAnswer = (preOfferAnswer) => {
   wss.sendPreOfferAnswer(data);
 };
 
-export const handlePreOfferAnswer = async (data) => {
+export const handlePreOfferAnswer = (data) => {
   const { preOfferAnswer } = data;
 
   ui.removeAllDialogs();
@@ -160,12 +160,12 @@ export const handlePreOfferAnswer = async (data) => {
     ui.showCallElements(connectedUserDetails.callType);
     createPeerConnection();
     // send webRTC offer
-    await sendWebRTCOffer();
+    sendWebRTCOffer();
   }
 };
 
 const sendWebRTCOffer = async () => {
-  const offer = peerConnection.createOffer();
+  const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
 
   wss.sendDataUsingWebRTCSignaling({
@@ -175,7 +175,19 @@ const sendWebRTCOffer = async () => {
   });
 };
 
-export const handleWebRTCOffer = (data) => {
-  console.log("webRTC offer came");
-  console.log(data);
+export const handleWebRTCOffer = async (data) => {
+  await peerConnection.setRemoteDescription(data.offer);
+  const answer = await peerConnection.createAnswer();
+  await peerConnection.setLocalDescription(answer);
+
+  wss.sendDataUsingWebRTCSignaling({
+    connectedUserSocketId: connectedUserDetails.socketId,
+    type: constants.webRTCSignaling.ANSWER,
+    answer,
+  });
+};
+
+export const handleWebRTCAnswer = async (data) => {
+  console.log("handling webRTC Answer");
+  await peerConnection.setRemoteDescription(data.answer);
 };
