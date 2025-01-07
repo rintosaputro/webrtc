@@ -62,6 +62,7 @@ io.on("connection", (socket) => {
     if (connectedPeer) {
       io.to(connectedUserSocketId).emit("webRTC-signaling", data);
     }
+    console.log("peerr nihh", connectedPeers);
   });
 
   socket.on("disconnect", () => {

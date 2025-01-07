@@ -38,7 +38,7 @@ export const getLocalPreview = () => {
 // we need execute that function before send webrtc offer
 const createPeerConnection = () => {
   peerConnection = new RTCPeerConnection(configuration);
-
+  console.log("create peer connection");
   peerConnection.onicecandidate = (event) => {
     console.log("getting ice candidates from stun server");
     if (event.candidate) {
@@ -111,13 +111,14 @@ export const handlePreOffer = (data) => {
     callType === constants.callType.VIDEO_PERSONAL_CODE
   ) {
     console.log("showing incoming call dialog");
-    ui.showIncomingCallDialog(callType, acceptCallHandler, rejectCallHandler);
+    ui.showIncomingCallDialog(callType, acceptCallHandler, rejectCallHandler); // ui panggilan masuk
   }
 };
 
+// remote calle
 const acceptCallHandler = () => {
   console.log("call accepted");
-  createPeerConnection();
+  createPeerConnection(); // create peer ketika calle menjawab panggilan
   sendPreOfferAnswer(constants.preOfferAnswer.CALL_ACCEPTED);
   ui.showCallElements(connectedUserDetails.callType);
 };
@@ -140,7 +141,7 @@ const sendPreOfferAnswer = (preOfferAnswer) => {
   ui.removeAllDialogs();
   wss.sendPreOfferAnswer(data);
 };
-
+// for remote caller
 export const handlePreOfferAnswer = (data) => {
   const { preOfferAnswer } = data;
 
@@ -163,7 +164,7 @@ export const handlePreOfferAnswer = (data) => {
 
   if (preOfferAnswer === constants.preOfferAnswer.CALL_ACCEPTED) {
     ui.showCallElements(connectedUserDetails.callType);
-    createPeerConnection();
+    createPeerConnection(); // create peer untuk si caller ketika di jawab panggilannya
     // send webRTC offer
     sendWebRTCOffer();
   }
@@ -181,6 +182,7 @@ const sendWebRTCOffer = async () => {
 };
 
 export const handleWebRTCOffer = async (data) => {
+  console.log("ketika mendapat offer langsung create answer", data);
   await peerConnection.setRemoteDescription(data.offer);
   const answer = await peerConnection.createAnswer();
   await peerConnection.setLocalDescription(answer);
@@ -193,12 +195,11 @@ export const handleWebRTCOffer = async (data) => {
 };
 
 export const handleWebRTCAnswer = async (data) => {
-  console.log("handling webRTC Answer");
+  console.log("ketika mendapat answer setRemote desc", data);
   await peerConnection.setRemoteDescription(data.answer);
 };
 
 export const handleWebRTCCandidate = async (data) => {
-  console.log("handling webRTC candidate");
   try {
     await peerConnection.addIceCandidate(data.candidate);
   } catch (err) {
